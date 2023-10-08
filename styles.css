@@ -1,0 +1,52 @@
+#main_div,
+#load-div,
+#save-div {
+  margin: auto;
+  width: 700px;
+}
+
+#switch_entities,
+#arrows-div {
+  justify-content: space-between;
+  display: flex;
+}
+
+#entity_header {
+  text-align: center;
+}
+
+#title-div {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+#current_translation > div > input {
+}
+
+#title-div {
+  background: #e8e6ef;
+  padding: 10px;
+  border-bottom: #09309a 5px solid;
+}
+
+#title-div > * {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.title_box {
+  border: #09309a 3px solid;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.title_box > .title {
+  position: relative;
+  top: -32px;
+  margin-left: 5px;
+  display: inline;
+  background-color: white;
+  font-size: 24px;
+  padding: 0 10px 0 10px;
+  font-weight: 600;
+}
