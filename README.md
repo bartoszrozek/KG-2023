@@ -18,7 +18,10 @@ Create python virtual environment
 
 Use newly created virtual environment
 
+Linux/MacOS:
 `source venv/bin/activate`
+Windows in PowerShell:
+`venv\Scripts\Activate.ps1`
 
 Install all dependencies needed
 
