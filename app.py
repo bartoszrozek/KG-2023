@@ -142,51 +142,11 @@ def server(input, output, session):
     def _():
 
 
-        graph = get_graph(directory_rc())
-        ### get_graph concent
-        graph = Graph()
-        graph.bind("ocs", ocs)
-        no_files = len(os.listdir(directory_rc()))
-        with ui.Progress(min=0, max=no_files) as p:
-            for i, filename in enumerate(os.listdir(directory_rc())):
-                p.set(i, message = f'Adding file {i} to the graph')
-                f = os.path.join(directory_rc(), filename)
-                # checking if it is a file
-                if os.path.isfile(f):
-                    new_node = Graph()
-                    new_node.parse(f)
-                    graph += new_node
-        ###
-                    
+        graph = get_graph(directory_rc(), ui)         
         enitites_to_find = get_entities_to_find(graph)
         enitites_to_find_rc.set(enitites_to_find)
         graph_rc.set(graph)
-
-        translations_df = get_translations(enitites_to_find, input.language_select())
-        ### get_translations content
-        names = ["(dbr:" + uri.split("/").pop() + ")" for uri in enitites_to_find["uri"]]
-        names = [
-            uri.split("/")
-            .pop()
-            .replace("*", "\*")
-            .replace("(", "\(")
-            .replace(")", "\)")
-            .replace(",", "\,")
-            .replace("'", "\\'")
-            for uri in enitites_to_find["uri"]
-        ]
-        names = ["(dbr:" + uri + ")" for uri in names]
-
-        labels = []
-        no_names = len(names)
-        with ui.Progress(min=0, max=no_names) as p:
-            for idx_start in range(0, no_names, 10):
-                idx_end = idx_start + 10
-                p.set(idx_start, message = f'Adding translations for files {idx_start} to {idx_end}')
-                labels.append(get_labels(names[idx_start:idx_end], input.language_select()))
-        translations_df = pd.concat(labels)
-        ###
-
+        translations_df = get_translations(enitites_to_find, input.language_select(), ui)
         entities.set(list(translations_df.uri))
         translations.set(list(translations_df.label))
 
