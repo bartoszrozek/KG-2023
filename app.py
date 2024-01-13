@@ -22,7 +22,11 @@ app_ui = ui.page_fluid(
         ui.div(
             ui.column(
                 4,
-                ui.input_text(id="load_opencs", label="OpenCS directory:"),
+                ui.input_text(
+                    id="load_opencs",
+                    label="OpenCS directory:",
+                    placeholder="Path to 'ontology/core'",
+                ),
             ),
             ui.column(
                 3,
@@ -31,7 +35,9 @@ app_ui = ui.page_fluid(
             ui.column(
                 3,
                 ui.input_text(
-                    id="language_select", label="Select language:", value="pl"
+                    id="language_select",
+                    label="Select language:",
+                    placeholder="Language tag (pl, ...)",
                 ),
             ),
             id="arrows-div",
@@ -86,20 +92,10 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    entities = reactive.Value(
-        [
-            "".join([random.choice(string.ascii_letters) for i in range(10)])
-            for i in range(100)
-        ]
-    )
-    translations = reactive.Value(
-        [
-            "".join([random.choice(string.ascii_letters) for i in range(10)])
-            for i in range(100)
-        ]
-    )
+    entities = reactive.Value([])
+    translations = reactive.Value([])
 
-    which_entity = reactive.Value(1)
+    which_entity = reactive.Value(0)
     enitites_to_find_rc = reactive.Value()
     graph_rc = reactive.Value()
 
@@ -109,25 +105,33 @@ def server(input, output, session):
 
     @reactive.Calc
     def curr_entity():
+        if len(entities()) == 0:
+            return ""
         return entities()[which_entity()]
 
     @reactive.Calc
     def curr_translation():
+        if len(translations()) == 0:
+            return ""
         return translations()[which_entity()]
 
     @reactive.Effect
     @reactive.event(input.previous_entity, ignore_init=True)
     def _():
-        if which_entity() == 1:
-            pass
+        if len(entities()) == 0:
+            return
+        if which_entity() == 0:
+            which_entity.set(len(entities()) - 1)
         else:
             which_entity.set(which_entity() - 1)
 
     @reactive.Effect
     @reactive.event(input.next_entity, ignore_init=True)
     def _():
-        if which_entity() == len(entities()):
-            pass
+        if len(entities()) == 0:
+            return
+        if which_entity() == len(entities()) - 1:
+            which_entity.set(0)
         else:
             which_entity.set(which_entity() + 1)
 
@@ -189,7 +193,12 @@ def server(input, output, session):
     @output
     @render.ui
     def entity_header():
-        h_tag = ui.h4(f"Entity {which_entity()}/{len(entities())}")
+        n_entities = len(entities())
+        if n_entities == 0:
+            which_enitity = 0
+        else:
+            which_enitity = which_entity() + 1
+        h_tag = ui.h4(f"Entity {which_enitity}/{n_entities}")
         return h_tag
 
     @output
