@@ -9,6 +9,7 @@ import ssl
 import rdflib
 from rdflib import Graph, Literal
 from src.helpers import get_labels
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 ocs = rdflib.Namespace("https://w3id.org/ocs/ont/")
@@ -140,28 +141,30 @@ def server(input, output, session):
     @reactive.Effect
     @reactive.event(input.query_labels, ignore_init=True)
     def _():
-
-
-        graph, no_entities_added = get_graph(directory_rc(), ui)         
+        graph, no_entities_added = get_graph(directory_rc(), ui)
         enitites_to_find = get_entities_to_find(graph)
         no_entities_in_dbpedia = len(enitites_to_find)
         enitites_to_find_rc.set(enitites_to_find)
         graph_rc.set(graph)
-        translations_df = get_translations(enitites_to_find, input.language_select(), ui)
+        translations_df = get_translations(
+            enitites_to_find, input.language_select(), ui
+        )
         no_translations = len(translations_df)
         entities.set(list(translations_df.uri))
         translations.set(list(translations_df.label))
 
-        newline="\n"
         m = ui.modal(
-            f"Number of entities loaded from folder: {no_entities_added}; {newline} Number of entities present in DBpedia: {no_entities_in_dbpedia}; {newline} Number of translations in {input.language_select()} found: {no_translations}",
+            f"Number of entities loaded from folder: {no_entities_added};",
+            ui.br(),
+            f"Number of entities present in DBpedia: {no_entities_in_dbpedia};",
+            ui.br(),
+            f"Number of translations in {input.language_select()} found: {no_translations}",
+            ui.br(),
             title="Extraction of translations completed",
             easy_close=True,
-            footer=None,
+            footer=ui.modal_button(label="OK"),
         )
         ui.modal_show(m)
-
-      
 
     @reactive.Effect
     @reactive.event(input.save_new_translation, ignore_init=True)
@@ -182,7 +185,6 @@ def server(input, output, session):
             directory = directory_rc()
         changed_enities = labels_df.merge(enitites_to_find, on="uri", how="left")
         save_graph(changed_enities, g, language, directory, ui)
-
 
     @output
     @render.ui
