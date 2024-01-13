@@ -2,6 +2,7 @@ from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, SKOS
 import rdflib
 from SPARQLWrapper import SPARQLWrapper, JSON
+from src.concept_iri import ConceptIRI
 
 sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 sparql.setReturnFormat(JSON)
@@ -20,6 +21,10 @@ def save_graph(changed_enities, g, language, directory, ui):
             if entity_name not in graph_triples.keys():
                 graph_triples[entity_name] = []
                 # graph_triples[entity_name].bind("ocs", ocs)
+            if "w3id.org/ocs/ont/C" in o:
+                o = ConceptIRI(str(o))
+                o.concept_id = int(o[o.rindex("/") + 2 :])
+
             graph_triples[entity_name].append((s, p, o))
     graph = {}
     for key, value in graph_triples.items():
