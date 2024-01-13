@@ -11,7 +11,8 @@ owl = rdflib.Namespace("http://www.w3.org/2002/07/owl#")
 ocs = rdflib.Namespace("https://w3id.org/ocs/ont/")
 
 
-def save_graph(changed_enities, g, language, directory):
+def save_graph(changed_enities, g, language, directory, ui):
+
     changed_enities_names = [str(entity) for entity in changed_enities["filename"]]
     graph_triples = {}
     for s, p, o in g.triples((None, None, None)):
@@ -37,3 +38,11 @@ def save_graph(changed_enities, g, language, directory):
 
     for key, value in graph.items():
         value.serialize(destination=directory + key + ".ttl")
+
+    m = ui.modal(
+            "Translations saved successfully",
+            title="Success",
+            easy_close=True,
+            footer=None,
+        )
+    ui.modal_show(m)

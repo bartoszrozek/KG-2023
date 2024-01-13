@@ -142,13 +142,24 @@ def server(input, output, session):
     def _():
 
 
-        graph = get_graph(directory_rc(), ui)         
+        graph, no_entities_added = get_graph(directory_rc(), ui)         
         enitites_to_find = get_entities_to_find(graph)
+        no_entities_in_dbpedia = len(enitites_to_find)
         enitites_to_find_rc.set(enitites_to_find)
         graph_rc.set(graph)
         translations_df = get_translations(enitites_to_find, input.language_select(), ui)
+        no_translations = len(translations_df)
         entities.set(list(translations_df.uri))
         translations.set(list(translations_df.label))
+
+        newline="\n"
+        m = ui.modal(
+            f"Number of entities loaded from folder: {no_entities_added}; {newline} Number of entities present in DBpedia: {no_entities_in_dbpedia}; {newline} Number of translations in {input.language_select()} found: {no_translations}",
+            title="Extraction of translations completed",
+            easy_close=True,
+            footer=None,
+        )
+        ui.modal_show(m)
 
       
 
@@ -170,14 +181,7 @@ def server(input, output, session):
             language = input.language_select()
             directory = directory_rc()
         changed_enities = labels_df.merge(enitites_to_find, on="uri", how="left")
-        save_graph(changed_enities, g, language, directory)
-        # m = ui.modal(
-        #     "Translations saved successfully",
-        #     title="Success",
-        #     easy_close=True,
-        #     footer=None,
-        # )
-        # ui.modal_show(m)
+        save_graph(changed_enities, g, language, directory, ui)
 
 
     @output

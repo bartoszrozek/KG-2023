@@ -1,0 +1,19 @@
+Generalnie to mniej więcej działa całość, ale do zrobienia:
+DONE - jakas animacja do czasu kiedy robi query, najlepiej jakby to pokazywało progress (query jest robione po 10 uri, żeby się niesypało), ale zwykłe też bd git chyba
+DONE -  jakis pop out jezeli zapiyswanie zakonczy sie sukcesem
+- Statystyki przy zapisywaniu: From x entities in this folder, y have translations to 'pl' in dbpedia
+
+- Poprawa/ dodanie kolejności numerków przy wyświetlaniu
+- zapisuje wszystko w kolejności alfabetycznej, dlatego robi takie różnice w diffie githubowym, z tego co czytalem na szybko to tak zazwyczaj sie zapisuje w ttl
+- Wyszukiwanie pliku zamiast okienka tekstowego?
+- Kolejność zapisywania
+- pewnie dobrze by było dodać sprawdzenie poprawności wprowadzonych danych żeby to wyskakiwało w powiadomieniu a nie wywalało apkę- czasami wywala query np w folderze 03 - do sprawdzenia, ale tbh to bez tego działa xd
+- można lepiej okomentować kod
+- spakować wszystko w docker - można na sam koniec
+
+Co do 1 i 2 to myślę, że najlepiej https://shiny.posit.co/py/api/ui.notification_show.html albo https://shiny.posit.co/py/api/ui.modal.html
+6,7 to dodatkowe rzeczy jak zostanie czasu i będziemy mieli ochotę 
+
+Z raportu to myślę, że wystarczy poprawić co on napisał w komentarzu + dodać instrukcję nt odpalenia dockera i user manual ze screenami jak działać w aplikacji
+
+C:/Users/marty/OneDrive/Dokumenty/notatki/9 semestr/Knowledge Graphs/OpenCS/ontology/core/
