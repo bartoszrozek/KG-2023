@@ -1,7 +1,8 @@
 # OpenCS Translation Tool
 
-Shiny app project for Knowledge Graphs course (WUT MiNI 2023).
-This application allows you to find DBpedia translations for entities in the OpenCS ontology, manually correct and save them.
+This Shiny application allows you to find DBpedia translations for entities in the OpenCS ontology, manually correct and save them.
+
+It was developed as a project for Knowledge Graphs course (WUT MiNI 2023).
 
 
 ## Run the application
