@@ -7,6 +7,27 @@ It was developed as a project for Knowledge Graphs course (WUT MiNI 2023).
 
 ## Run the application
 
+### Using Docker
+
+To run the application in docker first clone the repository to your local drive
+
+`git clone https://github.com/bartoszrozek/KG-2023`
+
+Cd into the directory
+
+`cd KG-2023`
+
+Build docker image
+
+`docker build -t kg_app .`
+
+Run docker
+
+`docker run -p 4000:8080 kg_app`
+
+The application will be accessible at `http://127.0.0.1:4000`
+
+### Using the virtual environment
 To run the application first clone the repository to your local drive
 
 `git clone https://github.com/bartoszrozek/KG-2023`
@@ -15,11 +36,11 @@ Cd into the directory
 
 `cd KG-2023`
 
-Create python virtual environment
+Create Python virtual environment
 
 `python -m venv venv`
 
-Use newly created virtual environment
+Use a newly created virtual environment
 
 - Linux/MacOS:
 `source venv/bin/activate`
