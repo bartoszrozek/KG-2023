@@ -1,5 +1,5 @@
 from rdflib import Graph, Literal
-from rdflib.namespace import RDF, RDFS, SKOS
+from rdflib.namespace import SKOS
 import rdflib
 from SPARQLWrapper import SPARQLWrapper, JSON
 from src.concept_iri import ConceptIRI
@@ -13,6 +13,10 @@ ocs = rdflib.Namespace("https://w3id.org/ocs/ont/")
 
 
 def save_graph(changed_enities, g, language, directory, ui):
+    """
+    Adds the changed entities (with the new language label) to the graph and saves this graph in the proper .ttl files format to the directory.
+    The logging is performed using the provided ui.
+    """
     changed_enities_names = [str(entity) for entity in changed_enities["filename"]]
     graph_triples = {}
     for s, p, o in g.triples((None, None, None)):
@@ -28,7 +32,6 @@ def save_graph(changed_enities, g, language, directory, ui):
             graph_triples[entity_name].append((s, p, o))
     graph = {}
     for key, value in graph_triples.items():
-        # value.sort(key = get_o)
         g = Graph()
         g.bind("ocs", ocs)
         for s, p, o in value:

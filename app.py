@@ -1,17 +1,12 @@
 from shiny import App, render, ui, reactive
-import string
-import random
 import os
 import pandas as pd
 from src.query import get_translations, get_entities_to_find, get_graph
 from src.save_graph import save_graph
 import ssl
 import rdflib
-from rdflib import Graph, Literal
-from src.helpers import get_labels
 
 ssl._create_default_https_context = ssl._create_unverified_context
-
 ocs = rdflib.Namespace("https://w3id.org/ocs/ont/")
 
 app_ui = ui.page_fluid(

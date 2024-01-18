@@ -1,10 +1,10 @@
-from rdflib import Graph, Literal
-from rdflib.namespace import RDF, RDFS, SKOS
+import rdflib
+from rdflib import Graph
+from rdflib.namespace import SKOS
 import rdflib
 import os
 from SPARQLWrapper import SPARQLWrapper, JSON
 import pandas as pd
-from src.helpers import get_labels
 
 sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 sparql.setReturnFormat(JSON)
@@ -15,6 +15,10 @@ ocs = rdflib.Namespace("https://w3id.org/ocs/ont/")
 
 
 def get_graph(directory, ui):
+    """
+    Loads entities from the .ttl files present in the given directory and creates graph out of them.
+    The logging is performed using the provided ui.
+    """
     graph = Graph()
     graph.bind("ocs", ocs)
     no_files = len(os.listdir(directory))
@@ -33,6 +37,9 @@ def get_graph(directory, ui):
 
 
 def get_entities_to_find(g):
+    """
+    Returns URIs and filenames of the entities from the graph that have a DBpedia match.
+    """
     enitites_to_find = pd.DataFrame(
         [(str(o), s) for s, p, o in g.triples((None, SKOS.closeMatch, None))],
         columns=["uri", "filename"],
@@ -41,6 +48,11 @@ def get_entities_to_find(g):
 
 
 def get_translations(enitites_to_find, language, ui):
+    """
+    Fetches the translations from DBpedia for provided entities in a provided language.
+    This is done 10 entites at the time due to limitations of the RDFLib query, using the get_labels() function for every chunk.
+    The logging is performed using the provided ui.
+    """
     names = ["(<" + uri + ">)" for uri in enitites_to_find["uri"]]
     labels = []
     no_names = len(names)
@@ -53,4 +65,39 @@ def get_translations(enitites_to_find, language, ui):
             )
             labels.append(get_labels(names[idx_start:idx_end], language))
     labels_df = pd.concat(labels)
+    return labels_df
+
+def get_labels(uris, language):
+    """
+    Executes the RDFSlib query for provided URIs, fetching their labels in the provided language.
+    """
+    language_labels = []
+    enitity_names = []
+    bsl = "\n"
+    query = f"""
+
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX dbr: <http://dbpedia.org/resource/>
+
+    SELECT DISTINCT
+        ?uri ?label 
+    WHERE {{
+        VALUES (?uri) {{{bsl.join(uris)}}}
+        ?uri rdfs:label ?label
+        FILTER (lang(?label) = '{language}')
+    }}
+    LIMIT 1000
+    """
+    sparql.setQuery(query)
+
+    try:
+        ret = sparql.queryAndConvert()
+
+        for r in ret["results"]["bindings"]:
+            language_labels.append(r["label"]["value"])
+            enitity_names.append(r["uri"]["value"])
+    except Exception as e:
+        print(e)
+
+    labels_df = pd.DataFrame({"uri": enitity_names, "label": language_labels})
     return labels_df
