@@ -27,6 +27,26 @@ Run docker
 
 The application will be accessible at `http://127.0.0.1:4000`
 
+You will also need to copy the OpenCS directory into the docker. To do so, first check your container's ID.
+
+`docker ps`
+
+You will find the CONTAINER ID in the line which has kg_app as IMAGE.
+
+Then copy the directory with OpenCS into the container (assuming that OpenCS is in the current directory)
+
+`docker cp OpenCS/ |YOUR CONTAINER ID|:/home/app`
+
+After the work, copy the OpenCS directory back
+
+`docker cp |YOUR CONTAINER ID|:/home/app/OpenCS OpenCS`
+
+In the application, you should provide 
+
+`/home/app/OpenCS/ontology/core/`
+
+as the path to OpenCS
+
 ### Using the virtual environment
 To run the application first clone the repository to your local drive
 
@@ -36,7 +56,7 @@ Cd into the directory
 
 `cd KG-2023`
 
-Create Python virtual environment
+Create a Python virtual environment
 
 `python -m venv venv`
 
