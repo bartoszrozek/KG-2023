@@ -20,7 +20,7 @@ app_ui = ui.page_fluid(
                 ui.input_text(
                     id="load_opencs",
                     label="OpenCS directory:",
-                    placeholder="Path to 'ontology/core'",
+                    placeholder="Path to 'ontology/core/'",
                 ),
             ),
             ui.column(

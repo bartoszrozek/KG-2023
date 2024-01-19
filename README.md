@@ -61,7 +61,7 @@ App should be accessible at `http://127.0.0.1:8000`
 ## User manual
 
 1. Clone the OpenCS ontology repository to your device from https://github.com/OpenCS-ontology/OpenCS.
-2. In the app, provide an OpenCS directory pulled from GitHub. The path up to the folder core (f.e. C:/.../OpenCS/ontology/core/) should be provided.
+2. In the app, provide an OpenCS directory pulled from GitHub. The path up to the folder core (f.e. C:/.../OpenCS/ontology/core/) should be provided. Remember about the / at the end of the path.
 3. Click "Load OpenCS" to load folders.
 4. Select the folder to analyze in the dropdown.
 5. Select language in appropriate text input. This string will be passed to

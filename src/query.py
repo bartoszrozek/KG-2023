@@ -50,7 +50,7 @@ def get_entities_to_find(g):
 def get_translations(enitites_to_find, language, ui):
     """
     Fetches the translations from DBpedia for provided entities in a provided language.
-    This is done 10 entites at the time due to limitations of the RDFLib query, using the get_labels() function for every chunk.
+    This is done 10 entites at the time due to limitations of the SPARQL query, using the get_labels() function for every chunk.
     The logging is performed using the provided ui.
     """
     names = ["(<" + uri + ">)" for uri in enitites_to_find["uri"]]
